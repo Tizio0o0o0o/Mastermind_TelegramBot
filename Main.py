@@ -12,10 +12,10 @@ def handle(msg):
         print('Got command: %s' % command)
 
         if 'help' in command:
-                bot.sendMessage(chat_id,str('Command list:\n-history: talks a little bit about the history of the game;\n-rules: explain how to play the game;\n-play: start new game;\nguess X X X X: where the X are number of your current guess'))
+                bot.sendMessage(chat_id,str('Command list:\n- History : talks a little bit about the history of the game;\n- Rules : explain how to play the game;\n- Play : start new game;\n- Guess X X X X : (the X are number of your current guess) is the way to tell me your guess while playing'))
         elif 'history' in command:
                 bot.sendMessage(chat_id,str('The game is based on an older, paper based game called Bulls and Cows. A computer adaptation of it was run in the 1960s on Cambridge University\'s Titan computer system, where it was called \'MOO\'. This version was written by Frank King. There was also another version for the TSS/8 time sharing system, written by J.S. Felton and finally a version for the Multics system at MIT by Jerrold Grochow. The modern game with pegs was invented in 1970 by Mordecai Meirowitz, an Israeli postmaster and telecommunications expert. Meirowitz presented the idea to many major toy companies but, after showing it at the Nuremberg International Toy Fair, it was picked up by a plastics company, Invicta Plastics, based near Leicester, UK. Invicta purchased all the rights to the game and the founder, Edward Jones-Fenleigh, refined the game further. It was released in 1971–2. Since 1971, the rights to Mastermind have been held by Invicta Plastics (Invicta always named the game Master Mind) They originally manufactured it themselves, though they have since licensed its manufacture to Hasbro worldwide, with the exception of Pressman Toys and Orda Industries who have the manufacturing rights to the United States and Israel, respectively. Starting in 1973, the game box featured a photograph of a man in a suit jacket seated in the foreground, with a young Asian woman standing behind him. The two amateur models (Bill Woodward and Cecilia Fung) reunited in June 2003 to pose for another publicity photo.'))
-#                bot.sendPhoto(chat_id,open('./Box1.png','rb'))
+                bot.sendPhoto(chat_id,open('./Box1.png','rb'))
         elif 'rules' in command:
                 bot.sendMessage(chat_id,str('I\'m the codemaker, and you the codebreaker. The codemaker chooses a pattern of n elements(you decide how many). Player decide in advance whether duplicates are allowed. If so, the codemaker may even choose four same-number code. The codebreaker tries to guess the pattern within eight to twelve turns. Each guess is made by sending a code. Once sent, the codemaker provides feedback by saying how many correct number in correct position (Correct) and correct number in incorrect position (Reposition) are in the guess. If there are duplicate numbers in the guess, they cannot all be awarded unless they correspond to the same number of duplicate numbers in the hidden code. For example, if the hidden code is 1-1-2-2 and the player guesses 1-1-1-2, the codemaker will award two \"Correct\" for the two correct 1, nothing for the third 1 as there is not a third 1 in the code, and a \"Reposition\" for the 2. No indication is given of the fact that the code also includes a second 2. Once feedback is provided, another guess is made; guesses and feedback continue to alternate until either the codebreaker guesses correctly, or all turns of guest are used.\nGood luck ;)'))
         elif 'play' in command:
@@ -50,18 +50,39 @@ def handle(msg):
                                                 if str(chat_id) in line:
                                                     del lines[i]
                                                     break
-                                lines.append('Chat_id=' + str(chat_id) + ',Numbers=' + str(num) + ', Row=' + str(rw) + ', Turns=' + str(tur) + ', Repetition=' + str(rep) + ', Guess remaining=' + str(tur) + ', Combination=' + str(combination) + ';\n')
+                                lines.append('Chat_id=' + str(chat_id) + ', Numbers=' + str(num) + ', Row=' + str(rw) + ', Turns=' + str(tur) + ', Repetition=' + str(rep) + ', Guess remaining=' + str(tur) + ', Combination=' + str(combination) + ';\n')
                                 with open('logfile.txt', 'w') as file:
                                         file.writelines(lines)
 
-                                bot.sendMessage(chat_id,str('Ok, let\'s start a new game, good lack. I already generated my secret code ' + str(combination)))
+                                bot.sendMessage(chat_id,str('Ok, let\'s start a new game, good lack. I already generated my secret code'))
                                 break
                 if not found:
-                        bot.sendMessage(chat_id,str('Firstly choose how many number I can choose the combination from (5 to 10,default 6), how long is the combination (3 to 6, default 4), how many rounds you have to crack my code (8 to 12, default 9) and if colors can be repeted (1 for yes or 0 for no, default 0)\nex:'))
-                        bot.sendMessage(chat_id,str('Settings:\nNumbers=6\nCode length=4\nTurns=9\nRepetition=0'))
-                        bot.sendMessage(chat_id,str('You can change this settings every time you want, by sending same command'))
+                        bot.sendMessage(chat_id,str('Firstly choose how many number I can choose the combination from (5 to 10,default 6), how long is the combination (3 to 6, default 4), how many rounds you have to crack my code (8 to 12, default 9) and if colors can be repeted (1 for yes or 0 for no, default 0)\nIf you want to apply defoult settings just write:'))
+                        bot.sendMessage(chat_id,str('Settings:\nNumbers=0\nCode length=0\nTurns=0\nRepetition=0'))
+                        bot.sendMessage(chat_id,str('otherwise substitute the numers you prefer. You can change this settings every time you want, by sending same command'))
+        elif 'solution' in command:
+                with open('logfile.txt', 'r') as file:
+                        lines = file.readlines()
+                for i,line in enumerate(lines):
+                        if str(chat_id) in line:
+                                numbers=[re.findall(r'(\d+)', line)]
+                                if len(numbers[0]) < 6:
+                                        bot.sendMessage(chat_id,str('What solution are you talking about? You firt need to starte a new game, write \"play\" to start'))
+                                        return
+                                rw=int(numbers[0][2])
+                                comb = [0 for x in range(rw)]
+                                for j in range(rw):
+                                        comb[j]=int(numbers[0][6+j])
+                                combinazione = copy.deepcopy(comb)
+                                bot.sendMessage(chat_id,str(combinazione))
+                                return
         elif 'settings' in command:
                 res=[re.findall(r'(\d+)', command)]
+                if len(res) != 4:
+                        bot.sendMessage(chat_id,str('You have to tell me how many number I can choose the combination from (5 to 10,default 6), how long is the combination (3 to 6, default 4), how many rounds you have to crack my code (8 to 12, default 9) and if colors can be repeted (1 for yes or 0 for no, default 0)\nIf you want to apply default settings just write:'))
+                        bot.sendMessage(chat_id,str('Settings:\nNumbers=0\nCode length=0\nTurns=0\nRepetition=0'))
+                        bot.sendMessage(chat_id,str('otherwise substitute the numers you prefer'))
+                        return
                 number=int(res[0][0])
                 row=int(res[0][1])
                 turns=int(res[0][2])
@@ -92,7 +113,7 @@ def handle(msg):
                         if str(chat_id) in line:
                                 del lines[i]
                                 break
-                lines.append('Chat_id=' + str(chat_id) + ',Numbers=' + str(number) + ', Row=' + str(row) + ', Turns=' + str(turns) + ' Repetition=' + str(repetition) + ';\n')
+                lines.append('Chat_id=' + str(chat_id) + ', Numbers=' + str(number) + ', Row=' + str(row) + ', Turns=' + str(turns) + ', Repetition=' + str(repetition) + ';\n')
                 with open('logfile.txt', 'w') as file:
                         file.writelines(lines)
 
@@ -125,6 +146,9 @@ def handle(msg):
                 for i,line in enumerate(lines):
                         if str(chat_id) in line:
                                 numbers=[re.findall(r'(\d+)', line)]
+                                if len(numbers[0]) < 6:
+                                        bot.sendMessage(chat_id,str('You firt need to starte a new game, write \"play\" to start or \"settings\" to change setings'))
+                                        return
                                 num=int(numbers[0][1])
                                 tur=int(numbers[0][3])
                                 rw=int(numbers[0][2])
@@ -170,25 +194,25 @@ def handle(msg):
 
                         if corr != rw:
                                 bot.sendMessage(chat_id,str('Correct in correct position: ' + str(corr) + '\nCorrect in wrong position: ' + str(pos)))
-                                lines.append('Chat_id=' + str(chat_id) + ',Numbers=' + str(num) + ', Row=' + str(rw) + ', Turns=' + str(tur) + ', Repetition=' + str(rep) + ', Guess remaining' + str(guesstur) + ', Combination=' + str(comb) + ';\n')
+                                lines.append('Chat_id=' + str(chat_id) + ', Numbers=' + str(num) + ', Row=' + str(rw) + ', Turns=' + str(tur) + ', Repetition=' + str(rep) + ', Guess remaining=' + str(guesstur) + ', Combination=' + str(comb) + ';\n')
                                 with open('logfile.txt', 'w') as file:
                                         file.writelines(lines)
                         else:
                                 bot.sendMessage(chat_id,str('Congratulation, you cracked my code. WELL DONE!'))
-                                lines.append('Chat_id=' + str(chat_id) + ',Numbers=' + str(num) + ', Row=' + str(rw) + ', Turns=' + str(tur) + ', Repetition=' + str(rep) + ';\n')
+                                lines.append('Chat_id=' + str(chat_id) + ', Numbers=' + str(num) + ', Row=' + str(rw) + ', Turns=' + str(tur) + ', Repetition=' + str(rep) + ';\n')
                                 with open('logfile.txt', 'w') as file:
                                         file.writelines(lines)
 
                 else:
                         bot.sendMessage(chat_id,str('You finished your turns, I won xD my code was unbreakable'))
-                        lines.append('Chat_id=' + str(chat_id) + ',Numbers=' + str(num) + ', Row=' + str(rw) + ', Turns=' + str(tur) + ', Repetition=' + str(rep) + ';\n')
+                        lines.append('Chat_id=' + str(chat_id) + ', Numbers=' + str(num) + ', Row=' + str(rw) + ', Turns=' + str(tur) + ', Repetition=' + str(rep) + ';\n')
                         with open('logfile.txt', 'w') as file:
                                 file.writelines(lines)
 
         else:
                 bot.sendMessage(chat_id,str('Sorry, I didn\'t understand'))
 
-bot = telepot.Bot('5871967316:AAErxUPZf6gtSabIMfKYc2kJBMSBO4OdSi8')      #enter your bot token here
+bot = telepot.Bot('5825324520:AAHkwGTvjIVFRBWhCpJnmpaenDvgDZvD7bM')     #enter your bot token here
 bot.message_loop(handle)
 print('I am listening...')
 
