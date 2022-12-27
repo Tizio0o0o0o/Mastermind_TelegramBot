@@ -78,7 +78,7 @@ def handle(msg):
                                 return
         elif 'settings' in command:
                 res=[re.findall(r'(\d+)', command)]
-                if len(res) != 4:
+                if len(res[0]) != 4:
                         bot.sendMessage(chat_id,str('You have to tell me how many number I can choose the combination from (5 to 10,default 6), how long is the combination (3 to 6, default 4), how many rounds you have to crack my code (8 to 12, default 9) and if colors can be repeted (1 for yes or 0 for no, default 0)\nIf you want to apply default settings just write:'))
                         bot.sendMessage(chat_id,str('Settings:\nNumbers=0\nCode length=0\nTurns=0\nRepetition=0'))
                         bot.sendMessage(chat_id,str('otherwise substitute the numers you prefer'))
@@ -208,11 +208,12 @@ def handle(msg):
                         lines.append('Chat_id=' + str(chat_id) + ', Numbers=' + str(num) + ', Row=' + str(rw) + ', Turns=' + str(tur) + ', Repetition=' + str(rep) + ';\n')
                         with open('logfile.txt', 'w') as file:
                                 file.writelines(lines)
-
+        elif command == '/start':
+                bot.sendMessage(chat_id,str('Hello, nice to meet you. I\'m Mind, Master Mind.\nDo you want to play with me? Tipe \"Help\" to begin'))
         else:
                 bot.sendMessage(chat_id,str('Sorry, I didn\'t understand'))
 
-bot = telepot.Bot('5825324520:AAHkwGTvjIVFRBWhCpJnmpaenDvgDZvD7bM')     #enter your bot token here
+bot = telepot.Bot('5800774344:AAF3l1ifTnhp_qS--2BdMPR1RTKRP0Z3blk')     #enter your bot token here
 bot.message_loop(handle)
 print('I am listening...')
 
