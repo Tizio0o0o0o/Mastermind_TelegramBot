@@ -185,7 +185,7 @@ def handle(msg):
                                 file.writelines(lines)
 
 
-bot = telepot.Bot('5871967316:AAErxUPZf6gtSabIMfKYc2kJBMSBO4OdSi8')      #enter your bot token here
+bot = telepot.Bot('TOKEN')      #enter your bot token here
 bot.message_loop(handle)
 print('I am listening...')
 
