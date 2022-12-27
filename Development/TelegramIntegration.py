@@ -19,7 +19,7 @@ def handle(msg):
         elif 'play' in command:
                 bot.sendMessage(chat_id,str('Ok, let\'s start a new game.'))
                 bot.sendMessage(chat_id,str('Firstly choose how many number I can choose the combination from (5 to 10,default 6), how long is the combination (3 to 6, default 4), how many rounds you have to crack my code (8 to 12, default 9) and if colors can be repeted (1 for yes or 0 for no, default 0)\nex:'))
-                bot.sendMessage(chat_id,str('Settings:\nNumbers=6\nCode length=4\nTurns=9\nNo'))
+                bot.sendMessage(chat_id,str('Settings:\nNumbers=6\nCode length=4\nTurns=9\nRepetition=0'))
         elif 'settings' in command:
                 res=[re.findall(r'=(\w+)', command)]
 
