@@ -4,14 +4,14 @@ from random import randint
 def main():
     colors = []
     player = []
-    row = int(input("Numero di elementi della combinazione(0 per default): "))
-    turns = int(input("Numero di turni (0 per default): "))
-    number = int(input("Numero di colori (0 per default): "))
-    repetition = int(input("1 per si o 0 per no (0 per default): "))
+    row = int(input("Numbers of elements of the combination (3 to 6,0 for default): "))
+    turns = int(input("Number of turns (8 to 12,0 for default): "))
+    number = int(input("Number of colors (5 to 10,0 for default): "))
+    repetition = int(input("Can numbers be repeted in the combination? 1 to say yes or 0 to say no (0 for default): "))
 
     if row == 0:
         row = 4
-    elif row<0 or row>10:
+    elif row<3 or row>6:
         print('cugghiuni')
         return        
     if turns == 0:
@@ -21,7 +21,7 @@ def main():
         return
     if number == 0:
         number = 6
-    elif number<3 or number>10:
+    elif number<5 or number>10:
         print('cugghiuni')
         return
     if repetition!=0 and repetition!=1:
