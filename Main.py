@@ -213,7 +213,7 @@ def handle(msg):
         else:
                 bot.sendMessage(chat_id,str('Sorry, I didn\'t understand'))
 
-bot = telepot.Bot('5800774344:AAF3l1ifTnhp_qS--2BdMPR1RTKRP0Z3blk')     #enter your bot token here
+bot = telepot.Bot('TOKEN')     #enter your bot token here
 bot.message_loop(handle)
 print('I am listening...')
 
