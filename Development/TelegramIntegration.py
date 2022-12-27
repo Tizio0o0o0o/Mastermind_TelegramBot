@@ -52,7 +52,7 @@ def handle(msg):
                         bot.sendMessage(chat_id,str('That\'s a new version of mastermind, maybe you are the inventor, who knows'))
                 bot.sendMessage(chat_id,str('By the way, good lack, I already generated my secret code'))
 
-bot = telepot.Bot('TOKEN')
+bot = telepot.Bot('TOKEN')      #enter your bot token here
 bot.message_loop(handle)
 print('I am listening...')
 
