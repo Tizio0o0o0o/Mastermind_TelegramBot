@@ -50,7 +50,7 @@ def main():
             el = int(input("-- "))
             player.append(el)
 
-        check(combinazione, player, repetition)
+        check(combinazione, player)
         turns -= 1
 
 def check(combinazione, player):
