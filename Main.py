@@ -171,43 +171,42 @@ def handle(msg):
                         bot.sendMessage(chat_id,str('You need to provide ' + str(rw) + ' numbers, not ' + str(len(pla[0])) + '!'))
                         return
                 
-                if guesstur > 0:
-                        guesstur -= 1
-                        corr = 0
-                        pos = 0
-                        j = 0
-                        lun = len(player)
-                        for i in range(lun):
-                                if player[i-j] in combinazione:
-                                        if player[i-j] == combinazione[i-j]:
-                                                corr += 1
-                                                player.pop(i-j)
-                                                combinazione.pop(i-j)
-                                                j += 1    
-                        for i in range(lun-j):
-                                if player[i] in combinazione:
-                                        k = 0
-                                        while player[i] != combinazione[k]:
-                                                k += 1
-                                        combinazione[k]=-1
-                                        pos += 1
-
-                        if corr != rw:
-                                bot.sendMessage(chat_id,str('Correct in correct position: ' + str(corr) + '\nCorrect in wrong position: ' + str(pos)))
-                                lines.append('Chat_id=' + str(chat_id) + ', Numbers=' + str(num) + ', Row=' + str(rw) + ', Turns=' + str(tur) + ', Repetition=' + str(rep) + ', Guess remaining=' + str(guesstur) + ', Combination=' + str(comb) + ';\n')
-                                with open('logfile.txt', 'w') as file:
-                                        file.writelines(lines)
-                        else:
-                                bot.sendMessage(chat_id,str('Congratulation, you cracked my code. WELL DONE!'))
+                guesstur -= 1
+                corr = 0
+                pos = 0
+                j = 0
+                lun = len(player)
+                for i in range(lun):
+                        if player[i-j] in combinazione:
+                                if player[i-j] == combinazione[i-j]:
+                                        corr += 1
+                                        player.pop(i-j)
+                                        combinazione.pop(i-j)
+                                        j += 1    
+                for i in range(lun-j):
+                        if player[i] in combinazione:
+                                k = 0
+                                while player[i] != combinazione[k]:
+                                        k += 1
+                                combinazione[k]=-1
+                                pos += 1
+                                
+                if corr != rw:
+                        bot.sendMessage(chat_id,str('Correct in correct position: ' + str(corr) + '\nCorrect in wrong position: ' + str(pos)))
+                        lines.append('Chat_id=' + str(chat_id) + ', Numbers=' + str(num) + ', Row=' + str(rw) + ', Turns=' + str(tur) + ', Repetition=' + str(rep) + ', Guess remaining=' + str(guesstur) + ', Combination=' + str(comb) + ';\n')
+                        with open('logfile.txt', 'w') as file:
+                                file.writelines(lines)
+                        if guesstur == 0:
+                                bot.sendMessage(chat_id,str('You finished your turns, I won xD my code was unbreakable'))
                                 lines.append('Chat_id=' + str(chat_id) + ', Numbers=' + str(num) + ', Row=' + str(rw) + ', Turns=' + str(tur) + ', Repetition=' + str(rep) + ';\n')
                                 with open('logfile.txt', 'w') as file:
                                         file.writelines(lines)
-
                 else:
-                        bot.sendMessage(chat_id,str('You finished your turns, I won xD my code was unbreakable'))
+                        bot.sendMessage(chat_id,str('Congratulation, you cracked my code. WELL DONE!'))
                         lines.append('Chat_id=' + str(chat_id) + ', Numbers=' + str(num) + ', Row=' + str(rw) + ', Turns=' + str(tur) + ', Repetition=' + str(rep) + ';\n')
                         with open('logfile.txt', 'w') as file:
                                 file.writelines(lines)
+                                
         elif command == '/start':
                 bot.sendMessage(chat_id,str('Hello, nice to meet you. I\'m Mind, Master Mind.\nDo you want to play with me? Tipe \"Help\" to begin'))
         else:
