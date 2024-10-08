@@ -16,7 +16,10 @@ def send_help_message(chat_id):
         "Command list:\n"
         "- History : talks a little bit about the history of the game;\n"
         "- Rules : explain how to play the game;\n"
-        "- Play : start new game;\n"
+        "- Play <num_colors> <code_length> <allow_repeats> : start new game with specified settings;\n"
+        "  - <num_colors>: Number of possible colors (e.g., 6)\n"
+        "  - <code_length>: Length of the code to guess (e.g., 4)\n"
+        "  - <allow_repeats>: Allow repeated colors in the code (0 = no, 1 = yes)\n"
         "- Guess X X X X : (the X are number of your current guess) is the way to tell me your guess while playing"
     )
     bot.sendMessage(chat_id, help_message)
@@ -42,40 +45,23 @@ def send_rules_message(chat_id):
     )
     bot.sendMessage(chat_id, rules_message)
 
-def start_new_game(chat_id):
-    if not os.path.exists('logfile.txt'):
-        with open('logfile.txt', 'w') as file:
-            file.write('')
+def start_new_game(chat_id, num, rw, rep):
+    # Generate the code
+    colors = list(range(num))
+    combination = [0] * rw
+    for i in range(rw):
+        c = randint(0, len(colors) - 1)
+        combination[i] = colors[c]
+        if rep == 0:
+            colors.pop(c)
 
-    with open('logfile.txt', 'r') as file:
-        lines = file.readlines()
-    
-    found = False
-    for line in lines:
-        if str(chat_id) in line:
-            found = True
-            numbers = re.findall(r'=(\d+)', line)
-            num = int(numbers[0])
-            tur = int(numbers[1])
-            rw = int(numbers[2])
-            rep = int(numbers[3])
+    # Save the game state in logfile.txt
+    with open('logfile.txt', 'w') as file:
+        file.write(f'{chat_id}={num}={rw}={rep}={combination}\n')
 
-            # code generation
-            colors = list(range(num))
-            combination = [0] * rw
-            for i in range(rw):
-                c = randint(0, len(colors) - 1)
-                combination[i] = colors[c]
-                if rep == 0:
-                    colors.pop(c)
-            
-            # save in logfile
-            with open('logfile.txt', 'w') as file:
-                file.writelines(lines)
-            break
-
-    if not found:
-        bot.sendMessage(chat_id, "No previous game found. Please start a new game.")
+    # Send a message to the user with the game settings
+    game_type = "with repetitions" if rep else "without repetitions"
+    bot.sendMessage(chat_id, f"New game started with {num} colors, code length {rw}, {game_type}! Make your guess using the format: Guess X X X X")
 
 def handle(msg):
     chat_id = msg['chat']['id']
@@ -90,7 +76,15 @@ def handle(msg):
     elif 'rules' in command:
         send_rules_message(chat_id)
     elif 'play' in command:
-        start_new_game(chat_id)
+        # Extract game settings from the command
+        match = re.match(r'play (\d+) (\d+) (\d+)', command)
+        if match:
+            num = int(match.group(1))
+            rw = int(match.group(2))
+            rep = int(match.group(3))
+            start_new_game(chat_id, num, rw, rep)
+        else:
+            bot.sendMessage(chat_id, "Invalid command format. Use: play <num_colors> <code_length> <allow_repeats>")
 
 # Initialize the bot with your token
 bot = telepot.Bot(TOKEN)
