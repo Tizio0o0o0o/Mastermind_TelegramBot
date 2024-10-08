@@ -4,6 +4,7 @@ import telepot
 import re
 from random import randint
 import configparser
+import os
 
 # Leggi il token dal file config.ini
 config = configparser.ConfigParser()
@@ -42,6 +43,10 @@ def send_rules_message(chat_id):
     bot.sendMessage(chat_id, rules_message)
 
 def start_new_game(chat_id):
+    if not os.path.exists('logfile.txt'):
+        with open('logfile.txt', 'w') as file:
+            file.write('')
+
     with open('logfile.txt', 'r') as file:
         lines = file.readlines()
     
