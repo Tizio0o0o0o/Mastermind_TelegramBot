@@ -29,7 +29,7 @@ def send_history_message(chat_id):
         "Starting in 1973, the game box featured a photograph of a man in a suit jacket seated in the foreground, with a young Asian woman standing behind him. The two amateur models (Bill Woodward and Cecilia Fung) reunited in June 2003 to pose for another publicity photo."
     )
     bot.sendMessage(chat_id, history_message)
-    bot.sendPhoto(chat_id, open('./Box1.png', 'rb'))
+    bot.sendPhoto(chat_id, open('./Box1.jpg', 'rb'))
 
 def send_rules_message(chat_id):
     rules_message = (
